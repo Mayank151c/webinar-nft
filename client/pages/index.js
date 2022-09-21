@@ -4,6 +4,7 @@ import Web3Modal from 'web3modal'
 import { create as ipfsHttpClient } from 'ipfs-http-client'
 import { useRouter } from 'next/router'
 
+// check comment for git ***********************
 //const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 //const client = ipfsHttpClient('https://hexnft.infura-ipfs.io:5001/api/v0')
 
