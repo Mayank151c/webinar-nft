@@ -17,6 +17,7 @@ import { contractAddress,PINATA_KEY,PINATA_SECRET } from './config';
 
 export default function CreateItem() {
   const [fileUrl, setFileUrl] = useState(null)
+  const [regCount, setRegCount] = useState(0)
   const [formInput, updateFormInput] = useState({ gmail: '', name: '', organisation: '' , designation: '' })
   const router = useRouter()
 
@@ -93,11 +94,21 @@ export default function CreateItem() {
         console.log('listed');
         router.push('/');
     });
+    // HexEventRegistrationContract.methods.getParticipentsCount().call().then(function(e){
+    //   setRegCount(e)
+    // })
+    setTimeout(() => {
+      HexEventRegistrationContract.methods.getParticipentsCount().call().then(function(e){
+        setRegCount(e);
+        // window.location.reload(1);
+      })
+    }, "3000")
+    
     
   }
 
-
-  async function eventRegstrationCount(){
+  // self invoked function 
+  (async function eventRegstrationCount(){
     const web3Modal = new Web3Modal()
     //console.log("line 99  : " + web3Modal);
     const provider = await web3Modal.connect()
@@ -113,16 +124,30 @@ export default function CreateItem() {
     const HexEventRegistrationContract = new web3.eth.Contract(HexEventRegistration.abi, HexEventRegistrationContractAddress)
     // console.log("line 111  : " + HexEventRegistrationContract);
     const accounts = await web3.eth.getAccounts()
-    HexEventRegistrationContract.methods.getParticipentsCount().call().then(console.log);
-  }
+    setTimeout(() => {
+      HexEventRegistrationContract.methods.getParticipentsCount().call().then(function(e){
+        setRegCount(e);
+        // window.location.reload(1);
+      })
+    }, "500")
+    
+  })();
 
   return (
     <div className="flex justify-center">
       
       <div className="w-1/2 flex flex-col pb-12">
-        <button onClick={eventRegstrationCount} className="font-bold mt-4 bg-teal-400 text-white rounded p-4 shadow-lg">
+        {/* <button onClick={eventRegstrationCount} className="font-bold mt-4 bg-teal-400 text-white rounded p-4 shadow-lg">
           No Of Resistrations
-        </button>
+        </button> */}
+        <div className="top-10 right-10 absolute font-bold text-1xl">
+              <h1>Registrations = <button  className="mr-4 text-teal-400 font-bold text-4xl ">{regCount}</button></h1>
+        </div>
+        {
+          fileUrl && (
+            <img className="rounded mt-4" width="350" src={fileUrl} />
+          )
+        }
         <input 
           placeholder="Enter Gmail"
           className="mt-2 border rounded p-4"
@@ -143,17 +168,6 @@ export default function CreateItem() {
           className="mt-2 border rounded p-4"
           onChange={e => updateFormInput({ ...formInput, designation: e.target.value })}
         />
-        {/* <input
-          type="file"
-          name="Asset"
-          className="my-4"
-          onChange={onChange}
-        /> */}
-        {
-          fileUrl && (
-            <img className="rounded mt-4" width="350" src={fileUrl} />
-          )
-        }
         <button onClick={eventRegstration} className="font-bold mt-4 bg-teal-400 text-white rounded p-4 shadow-lg">
           Registor
         </button>

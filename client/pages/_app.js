@@ -1,7 +1,9 @@
 import '../styles/globals.css'
 import Link from 'next/link'
+import "./app.css"
 
 function MyApp({ Component, pageProps }) {
+
   return (
     <div>
       <nav className="border-b p-6">
